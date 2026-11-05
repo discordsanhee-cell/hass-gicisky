@@ -173,6 +173,15 @@ DEVICE_TYPES: dict[int, DeviceEntry] = {
         height=640,
         compression2=True
     ),
+    # 커스텀: LilyGO T-Display (ESP32, 1.14" TFT, 135x240) - 가짜 ESL 태그 펌웨어용.
+    # tft/rotation/mirror 전부 꺼서 전송되는 비트맵이 그대로 264x125(가로)가 되도록 함.
+    0x0ED1: DeviceEntry(
+        name="T-Display",
+        model="LilyGO T-Display BWRY",
+        width=264,
+        height=125,
+        four_color=True,
+    ),
 }
 
 def get_device(device_id: int, firmware: int) -> DeviceEntry | None:
