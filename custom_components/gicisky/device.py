@@ -8,6 +8,7 @@ from homeassistant.components.bluetooth.passive_update_processor import (
     PassiveBluetoothEntityKey,
 )
 from homeassistant.const import ATTR_HW_VERSION, ATTR_SW_VERSION
+from homeassistant.helpers.device_registry import DeviceInfo
 from homeassistant.helpers.sensor import sensor_device_info_to_hass_device_info
 
 def device_key_to_bluetooth_entity_key(
@@ -19,7 +20,9 @@ def device_key_to_bluetooth_entity_key(
 
 def hass_device_info(sensor_device_info):
     """Convert sensor device info to HA device info, keeping sw/hw versions."""
-    device_info = sensor_device_info_to_hass_device_info(sensor_device_info)
+    # 최신 HA 코어에서는 sensor_device_info_to_hass_device_info()가 공유(frozen) 인스턴스를
+    # 반환해서 바로 수정하면 TypeError가 남 -> 먼저 복사본을 만든다.
+    device_info = DeviceInfo(**sensor_device_info_to_hass_device_info(sensor_device_info))
     if sensor_device_info.sw_version is not None:
         device_info[ATTR_SW_VERSION] = sensor_device_info.sw_version
     if sensor_device_info.hw_version is not None:
